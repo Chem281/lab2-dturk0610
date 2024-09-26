@@ -1,20 +1,32 @@
 # Assert the minimum cmake version
+cmake_minimum_required(VERSION 3.14)
 
 # Set the project name
+project(TEST_CBLAS  VERSION 0.1.0
+                    DESCRIPTION "Simple BLAS Usage."
+                    LANGUAGES CXX)
 
 # Require a modern C++ standard
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Add a library called LinearAlg built from src/linear_alg.cpp
+add_library(LinearAlg ./src/linear_alg.cpp)
 
 # Add an executable called Main built from src/main.cpp
+add_executable(Main ./src/main.cpp)
 
 # Add the ./include directory as an include directory for the Main executable
+target_include_directories(Main PRIVATE ./include)
 
 # Locate the BLAS package
+find_package(BLAS REQUIRED)
 
 # Link the LinearAlg library target to BLAS via ${BLAS_LIBRARIES}
+target_link_libraries(LinearAlg PRIVATE ${BLAS_LIBRARIES})
 
 # Link the Main executable target to the LinearAlg library target
+target_link_libraries(Main LinearAlg)
 
 #########################################
 # BEGIN GoogleTest setup, DO NOT CHANGE #
